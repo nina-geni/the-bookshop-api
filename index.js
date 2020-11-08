@@ -7,27 +7,66 @@
  * Importing some libraries
  */
 
-const  { ApolloServer } = require('apollo-server');
 const dotenv = (require('dotenv')).config();
+const { ApolloServer } = require('apollo-server');
+const mongoose = require('mongoose');
 const typeDefs = require('./typeDefs');
 const resolvers = require('./resolvers');
+const jwt = require('jsonwebtoken');
 
-// create an apollo server instance
+/**
+ * Mongoose Database
+ */
 
-const server = new ApolloServer({
-  typeDefs,
-  resolvers,
-  introspection: true,
-  playground: true,
-  context: (({ req }) => {
-    // console.log(req);
-  })
-});
-
-server
-  .listen({
-    port: process.env.PORT || process.env.GRAPHQL_PORT || 4000
-  })
-  .then(({ url }) => {
-    console.log(`Server started at ${url}`);
+const openMongoDB = async () => {
+  return new Promise((resolve, reject) => {
+    mongoose.connect(
+      process.env.MONGODB_CONNECTIONSTRING,
+      {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+        useFindAndModify: false
+      }
+    );
+    mongoose.connection.on('error', (e) => reject(e.message));
+    mongoose.connection.once('open', () => resolve());
   });
+}
+
+/**
+ * Apollo Server
+ */
+
+const startServer = () => {
+  return new Promise((resolve, reject) => {
+    const server = new ApolloServer({
+      typeDefs,
+      resolvers,
+      introspection: true,
+      playground: true,
+      context: (({ req }) => {
+        const authHeader = req.headers['authorization'];
+        const token = authHeader && authHeader.split(' ')[1];
+        try {
+          const decodedToken = jwt.verify(token, process.env.TOKEN_SALT);
+          return decodedToken && decodedToken.userId ? { userId: decodedToken.userId } : { userId: '' }
+        } catch {
+          return { userId: '' }
+        }
+      })
+    });
+
+    server
+      .listen({ port: process.env.GRAPHQL_PORT || 4000 })
+      .then(({ url }) => { resolve(url); });
+  });
+}
+
+/**
+ * Start the server
+ */
+
+openMongoDB()
+  .then(startServer)
+  .then((url) => console.log(`Server Started on ${url}`))
+  .catch(e => console.error(e));
