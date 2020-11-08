@@ -10,8 +10,8 @@ module.exports = gql`
     boek(id:ID):Boek
     categories:[Categorie]
     categorie(id:ID):Categorie
-    login(user:userInput):AuthData
+    login(user:UserInput):AuthData
     users:[User]
-    uer(id:ID):User
+    user(id:ID):User
   }
 `
