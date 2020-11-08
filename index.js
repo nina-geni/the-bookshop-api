@@ -57,7 +57,7 @@ const startServer = () => {
     });
 
     server
-      .listen({ port: process.env.GRAPHQL_PORT || 4000 })
+      .listen({ port: process.env.PORT || 4000 })
       .then(({ url }) => { resolve(url); });
   });
 }
