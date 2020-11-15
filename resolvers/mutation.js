@@ -39,7 +39,7 @@ module.exports = {
         if(!categorieExists) throw new Error('Categorie bestaat al.')
 
         const foundCategorie = await Categorie.findOne({_id: categorieId});
-        Categorie.deleteOne({ _id:categorieId});
+        await Categorie.deleteOne({ _id:categorieId});
         return foundCategorie;
 
       } catch(e) {
@@ -59,7 +59,7 @@ module.exports = {
         const nieuwBoek = await Boek.create({
           ...boek,
           categories,
-          toevoegingsDatum: new Date,
+          toevoegingsdatum: new Date,
         });
 
         pubsub.publish('BOEK_ADDED', { boekAdded: nieuwBoek});
@@ -75,7 +75,7 @@ module.exports = {
 
         if (boek.categories && boek.categories.length > 0) {
           const categorieIds = boek.categories.map(({ id }) => id);
-          categories = await Categorie.find({ _id: { $in: authorIds}});
+          categories = await Categorie.find({ _id: { $in: categorieIds}});
         }
 
         boek.categories = categories;

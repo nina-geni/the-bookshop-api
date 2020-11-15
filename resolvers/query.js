@@ -1,5 +1,6 @@
 /**
  * The Query Resolvers
+ * Data ophalen
  */
 const { Boek, Categorie, User } = require('../mongo/models');
 const jwt = require ('jsonwebtoken');
@@ -19,7 +20,8 @@ module.exports = {
       const userExists = await User.exists({ email });
       if(!userExists) throw new Error('User does not exist.');
 
-      const foundUser = await User.findOne({ emai: email});
+      const foundUser = await User.findOne({ email: email});
+    
 
       const isEqual = bcrypt.compareSync(password, foundUser.password);
       if(!isEqual) throw new Error ('Password is incorrect');

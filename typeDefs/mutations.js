@@ -1,5 +1,6 @@
 /**
  * The GraphQL mutations
+ * Veranderingen database
  */
 
 const  { gql } = require('apollo-server');

@@ -1,5 +1,6 @@
 /**
  * The Scalars (custom input/output types)
+ * Zelf gedefinieerd type bvb date
  */
 
 const { GraphQLScalarType } = require('graphql');

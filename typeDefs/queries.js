@@ -1,5 +1,6 @@
 /**
  * The GraphQL queries
+ * Schema boeken array van boeken teruggeven
  */
 
 const  { gql } = require('apollo-server');

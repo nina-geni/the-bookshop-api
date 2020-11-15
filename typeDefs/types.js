@@ -1,5 +1,5 @@
 /**
- * The GraphQL types
+ * The GraphQL types 
  */
 
 const  { gql } = require('apollo-server');
@@ -55,6 +55,5 @@ module.exports = gql`
     id: ID!
     email: String
     password: String
-    isAdmin: Boolean
   }
 `
