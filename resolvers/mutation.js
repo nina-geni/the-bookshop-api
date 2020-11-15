@@ -8,7 +8,8 @@ const pubsub = require('./pubsub');
 module.exports = {
   Mutation: {
     // e.g. addDummy: (parent, { dummy }, { userAllowed }) => {}
-    addCategorie: async (parent, { categorie }, context) => {
+    addCategorie: async (parent, { categorie }, {userId}) => {
+      if (!userId) throw new Error('Gebruiker mag dit niet doen');
       try {
         return await Categorie.create({
           ...categorie
@@ -17,7 +18,8 @@ module.exports = {
         throw new Error (e.message);
       }
     },
-    updateCategorie: async (parent, { categorie, categorieId  }, context) => {
+    updateCategorie: async (parent, { categorie, categorieId  }, {userId}) => {
+      if (!userId) throw new Error('Gebruiker mag dit niet doen');
       try {
         const { naam } = categorie;
 
@@ -32,7 +34,8 @@ module.exports = {
         throw new Error (e.message);
       }
     },
-    deleteCategorie: async (parent, { categorieId  }, context) => {
+    deleteCategorie: async (parent, { categorieId  }, {userId}) => {
+      if (!userId) throw new Error('Gebruiker mag dit niet doen');
       try {
 
         const categorieExists = await Categorie.exists({ _id: categorieId });
@@ -47,7 +50,8 @@ module.exports = {
       }
     },
     // e.g. addDummy: (parent, { dummy }, { userAllowed }) => {}
-    addBoek: async (parent, { boek }, context) => {
+    addBoek: async (parent, { boek }, {userId}) => {
+      if (!userId) throw new Error('Gebruiker mag dit niet doen');
       try {
         let categories =  [];
 
@@ -69,7 +73,8 @@ module.exports = {
         throw new Error (e.message);
       }
     },
-    updateBoek: async (parent, { boek, boekId  }, context) => {
+    updateBoek: async (parent, { boek, boekId  }, {userId}) => {
+      if (!userId) throw new Error('Gebruiker mag dit niet doen');
       try {
         let categories =  [];
 
@@ -94,7 +99,8 @@ module.exports = {
         throw new Error (e.message);
       }
     },
-    deleteBoek: async (parent, { boekId  }, context) => {
+    deleteBoek: async (parent, { boekId  }, {userId}) => {
+      if (!userId) throw new Error('Gebruiker mag dit niet doen');
       try {
 
         const boekExists = await Boek.exists({ _id: boekId });
